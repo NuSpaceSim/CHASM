@@ -1,6 +1,24 @@
 from cherenkov_yield import CherenkovYield as cy
 
 class CHASM(cy):
+    """A class for generating extensive air shower profiles and their Cherenkov
+    outputs. The shower can either be a Gaisser Hillas shower or a Griessen
+    Shower. The Cartesian origin is at the point where the shower axis intersects
+    with the Earth's surface.
+
+    Parameters:
+    X_max: depth at shower max (g/cm^2)
+    N_max: number of charged particles at X_max
+    h0: height of first interaction above the ground level (meters)
+    X0: Start depth
+    theta: Polar angle of the shower axis with respect to vertical. Vertical
+    is defined as normal to the Earth's surface at the point where the axis
+    intersects with the surface.
+    direction: Shower direction, either 'up' for upward going showers, or 'down'
+    for downward going showers.
+    tel_vectors: user defined array of cartesian telescope locations
+    
+    """
     def __init__(self,X_max,N_max,h0,theta,direction,tel_vectors,min_l,max_l):
         super().__init__(X_max,N_max,h0,theta,direction,tel_vectors,min_l,max_l)
 
