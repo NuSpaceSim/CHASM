@@ -1,5 +1,4 @@
 import numpy as np
-from iact_read import IACTread
 from scipy.constants import value,nano
 from shower_axis import Shower as sh
 
