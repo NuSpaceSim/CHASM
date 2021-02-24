@@ -17,7 +17,8 @@ class CHASM(cy):
     direction: Shower direction, either 'up' for upward going showers, or 'down'
     for downward going showers.
     tel_vectors: user defined array of cartesian telescope locations
-    
+    min_l: minimum accepted Cherenkov wavelength
+    max_l: maximum accepted Cherenkov wavelength
     """
     def __init__(self,X_max,N_max,h0,theta,direction,tel_vectors,min_l,max_l):
         super().__init__(X_max,N_max,h0,theta,direction,tel_vectors,min_l,max_l)
