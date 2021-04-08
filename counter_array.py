@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.constants import value,nano
 from shower_axis import Shower as sh
+from functools import lru_cache
 
 class CounterArray(sh):
     '''Class for calculating Cherenkov yield of upward going showers at a

@@ -49,7 +49,7 @@ class Shower():
         self.direction = direction
         self.theta = theta
         self.phi = phi
-        self.axis_h = np.linspace(ground_level,self.atm.maximum_height,10000)
+        self.axis_h = np.linspace(ground_level+1,self.atm.maximum_height,10000)
         self.axis_rho = self.atm.density(self.axis_h)
         self.axis_delta = self.atm.delta(self.axis_h)
         self.axis_h -= ground_level
@@ -62,6 +62,7 @@ class Shower():
         self.ground_level = ground_level
         self.earth_radius += ground_level # adjust earth radius
         self.axis_r = self.h_to_axis_R_LOC(self.axis_h, theta)
+        self.theta_difference = theta - self.theta_normal(self.axis_h, self.axis_r)
         self.axis_start_r = self.h_to_axis_R_LOC(h0, theta)
         self.axis_X, self.axis_dr, self.X0 = self.set_depth(self.axis_r,
                 self.axis_start_r)
@@ -96,11 +97,10 @@ class Shower():
         cos_EM = np.cos(np.pi-theta)
         R = cls.earth_radius
         r_CoE= h + R # distance from the center of the earth to the specified height
-        r = R*cos_EM + np.sqrt(R**2*cos_EM**2-R**2+r_CoE**2)
-        return r
+        return R*cos_EM + np.sqrt(R**2*cos_EM**2-R**2+r_CoE**2)
 
     @classmethod
-    def theta_normal(cls,h,theta):
+    def theta_normal(cls,h,r):
         ''' Convert a polar angle (at a given height) with respect to the z axis
         to a polar angle with respect to vertical in the atmosphere (at that
         height)
@@ -110,11 +110,11 @@ class Shower():
         theta: array of polar angle of shower axis (radians)
 
         Returns:
-        The cosine(s) of the corrected angles(s)
+        The corrected angles(s)
         '''
-        r = cls.h_to_axis_R_LOC(h, theta)
-        cq = ((cls.earth_radius+h)**2+r**2-cls.earth_radius**2)/(2*r*(cls.earth_radius+h))
-        return cq
+        cq = (r**2 + h**2 + 2*cls.earth_radius*h)/(2*r*(cls.earth_radius+h))
+        # cq = ((cls.earth_radius+h)**2+r**2-cls.earth_radius**2)/(2*r*(cls.earth_radius+h))
+        return np.arccos(cq)
 
     def set_depth(self,axis_r,axis_start_r):
         '''Integrate atmospheric density over selected direction to create
